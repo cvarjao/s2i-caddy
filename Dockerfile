@@ -3,6 +3,8 @@ MAINTAINER shea.phillips@cloudcompass.ca
 
 LABEL io.openshift.s2i.scripts-url=image:///tmp/scripts
 
+RUN apk --no-cache add ca-certificates tar curl
+    
 ## Copy the S2I scripts into place
 COPY ./.s2i/bin/ /tmp/scripts
 
