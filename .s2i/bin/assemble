@@ -12,25 +12,6 @@ if [[ "$1" == "-h" ]]; then
 	# print the usage.
 	exec /usr/libexec/s2i/usage
 fi
-echo 'assemble files'
-find /tmp -type f -name '*assemble' -ls
-echo 'tmp'
-ls -la /tmp/
-
-echo '/tmp/src/'
-ls -la /tmp/src/
-
-#find /tmp/src/.s2i -type f
-
-if [ -f /tmp/src/s2i/bin/assemble ]
-then
-	echo "running custom assemble"
-	chmod +x /tmp/src/s2i/bin/assemble
-	/tmp/src/s2i/bin/assemble
-else
-	echo "did not run custom assemble"
-fi
-
 
 # Restore artifacts from the previous build (if they exist).
 #
@@ -39,8 +20,26 @@ if [ "$(ls /tmp/artifacts/ 2>/dev/null)" ]; then
   mv /tmp/artifacts/. ./
 fi
 
-echo "---> Installing application source..."
-cp -Rf /tmp/src/* /var/www/html
+
+echo 'assemble files'
+find /tmp -type f -name '*assemble' -ls
+echo 'tmp'
+ls -la /tmp/
+echo '/tmp/src/'
+ls -la /tmp/src/
+
+#find /tmp/src/.s2i -type f
+
+
+if [ -f /tmp/src/s2i/bin/assemble ]
+then
+	echo "running custom assemble"
+	chmod +x /tmp/src/s2i/bin/assemble
+	/tmp/src/s2i/bin/assemble
+else
+	echo "---> Installing application source..."
+	cp -Rf /tmp/src/* /var/www/html
+fi
 
 if [[ -e "/var/www/html/Caddyfile" ]]; then
     echo "Replacing default Caddyfile..."
